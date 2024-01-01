@@ -53,7 +53,7 @@ import {
 } from "../../api/productApi";
 
 import { Buffer } from "buffer";
-import FormProduct from "./Comp/FromProduct";
+import FormProduct from "./Comp/FormProduct";
 import { getAllCartsService } from "../../api/cartApi";
 import {
   deleteOrderService,
