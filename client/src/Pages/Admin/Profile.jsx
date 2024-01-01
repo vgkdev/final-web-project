@@ -2,7 +2,6 @@ import {
   Box,
   Divider,
   Flex,
-  Image,
   Spacer,
   Text,
   useToast,
@@ -22,10 +21,6 @@ import MyRoutine from "./MyRoutine";
 import Loading from "../../Components/Loading";
 import LogsPage from "./LogsPage";
 import Reports from "./Reports";
-import Photos from "./Photos";
-import Exercises from "./Exercises";
-import Messages from "./Messages";
-import Dashboard from "./Dashboard";
 import "./profile.css";
 import {
   FaUsers,
@@ -58,8 +53,7 @@ import {
 } from "../../api/productApi";
 
 import { Buffer } from "buffer";
-import FormProduct from "./Comp/FromProduct";
-import { getAllCartsService } from "../../api/cartApi";
+import FormProduct from "./Comp/FormProduct";
 import {
   deleteOrderService,
   editOrderService,
@@ -104,10 +98,8 @@ export const Profile = () => {
   /* dashboard */
   const [users, setUsers] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [admins, setAdmins] = useState([]);
   const [products, setProducts] = useState([]);
   const [orderData, setOrderData] = useState([]);
-  const [carts, setCarts] = useState([]);
   const [userDetailInModal, setUserDetailInModal] = useState(null);
   const [categoryDetailInModal, setCategoryDetailInModal] = useState(null);
   const [productDetailInModal, setProductDetailInModal] = useState(null);
@@ -134,8 +126,7 @@ export const Profile = () => {
   const handleShowModalUser = (id, type) => {
     if (type !== "Create") {
       const user = users.filter((value) => value.id === id);
-      // console.log("check id is showed: ", user[0]);
-      // console.log("check type: ", type);
+      
       setUserDetailInModal(user[0]);
     } else {
       setUserDetailInModal(null);
@@ -148,8 +139,6 @@ export const Profile = () => {
   const handleShowModalCategory = (id, type) => {
     if (type !== "Create") {
       const category = categories.filter((value) => value.id === id);
-      // console.log("check id is showed: ", user[0]);
-      // console.log("check type: ", type);
       setCategoryDetailInModal(category[0]);
     } else {
       setCategoryDetailInModal(null);
