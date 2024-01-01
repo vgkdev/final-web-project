@@ -53,7 +53,8 @@ import {
 } from "../../api/productApi";
 
 import { Buffer } from "buffer";
-import FormProduct from "./Comp/FormProduct";
+import FormProduct from "./Comp/FromProduct";
+import { getAllCartsService } from "../../api/cartApi";
 import {
   deleteOrderService,
   editOrderService,
@@ -98,8 +99,10 @@ export const Profile = () => {
   /* dashboard */
   const [users, setUsers] = useState([]);
   const [categories, setCategories] = useState([]);
+  const [admins, setAdmins] = useState([]);
   const [products, setProducts] = useState([]);
   const [orderData, setOrderData] = useState([]);
+  const [carts, setCarts] = useState([]);
   const [userDetailInModal, setUserDetailInModal] = useState(null);
   const [categoryDetailInModal, setCategoryDetailInModal] = useState(null);
   const [productDetailInModal, setProductDetailInModal] = useState(null);
