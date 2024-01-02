@@ -1,0 +1,12 @@
+diff a/client/src/Pages/Admin/Profile.jsx b/client/src/Pages/Admin/Profile.jsx	(rejected hunks)
+@@ -98,10 +98,8 @@
+   /* dashboard */
+   const [users, setUsers] = useState([]);
+   const [categories, setCategories] = useState([]);
+-  const [admins, setAdmins] = useState([]);
+   const [products, setProducts] = useState([]);
+   const [orderData, setOrderData] = useState([]);
+-  const [carts, setCarts] = useState([]);
+   const [userDetailInModal, setUserDetailInModal] = useState(null);
+   const [categoryDetailInModal, setCategoryDetailInModal] = useState(null);
+   const [productDetailInModal, setProductDetailInModal] = useState(null);
