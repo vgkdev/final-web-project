@@ -1,5 +1,4 @@
 {
-  
   "name": "server",
   "version": "1.0.0",
   "description": "final-web-project",
@@ -8,7 +7,6 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon --exec npx babel-node src/server.js"
   },
-
   "author": "VGK",
   "license": "ISC",
   "dependencies": {
@@ -24,7 +22,6 @@
     "sequelize": "^6.30.0",
     "vn-payments": "^1.1.0"
   },
-
   "devDependencies": {
     "@babel/core": "^7.21.4",
     "@babel/node": "^7.20.7",
@@ -32,5 +29,4 @@
     "nodemon": "^2.0.22",
     "sequelize-cli": "^6.6.0"
   }
-
 }
