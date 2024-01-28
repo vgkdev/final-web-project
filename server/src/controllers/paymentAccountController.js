@@ -4,6 +4,7 @@ import {
   editPaymentAccount,
   getPaymentAccountById,
   deletePaymentAccount,
+  payment,
 } from "../services/paymentAccountService";
 
 const handleCreateNewPaymentAccount = async (req, res) => {
@@ -31,10 +32,16 @@ const handleDeletePaymentAccount = async (req, res) => {
   return res.status(200).json(response);
 };
 
+const handlePayment = async (req, res) => {
+  const response = await payment(req.body);
+  return res.status(200).json(response);
+};
+
 module.exports = {
   handleCreateNewPaymentAccount,
   handleGetALlPaymentAccount,
   handleEditPaymentAccount,
   handleGetPaymentAccountById,
   handleDeletePaymentAccount,
+  handlePayment,
 };

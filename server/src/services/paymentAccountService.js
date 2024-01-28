@@ -2,6 +2,7 @@ import db from "../models/index";
 
 const createNewPaymentAccount = (data) => {
   const { userId, accountNumber, amount } = data;
+  console.log(">>>chcek data payment account: ", data);
   return new Promise(async (resolve, reject) => {
     try {
       if (!userId || !accountNumber || !amount) {
@@ -185,10 +186,53 @@ const deletePaymentAccount = (id) => {
   });
 };
 
+const payment = (data) => {
+  const { userId, amount } = data;
+
+  return new Promise(async (resolve, reject) => {
+    try {
+      const paymentAccount = await db.PaymentAccount.findOne({
+        where: {
+          userId: userId,
+        },
+      });
+
+      if (paymentAccount.amount >= amount) {
+        const [numAffectedRows, updatedRows] = await db.PaymentAccount.update(
+          {
+            amount: paymentAccount.amount - amount,
+          },
+          {
+            where: { id: paymentAccount.id },
+            returning: true,
+            plain: true,
+          }
+        );
+        resolve({
+          errCode: 0,
+          message: "Payment successfully !",
+        });
+      } else {
+        resolve({
+          errCode: 1,
+          message: "Không đủ tiền",
+        });
+      }
+    } catch (e) {
+      console.log("Error: ", e);
+      reject({
+        errCode: 500,
+        message: "Internal server error",
+      });
+    }
+  });
+};
+
 module.exports = {
   createNewPaymentAccount,
   getALlPaymentAccounts,
   editPaymentAccount,
   deletePaymentAccount,
   getPaymentAccountById,
+  payment,
 };

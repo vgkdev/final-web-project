@@ -7,8 +7,8 @@ import { connectDB } from "./config/connectDB";
 import cors from "cors";
 
 require("dotenv").config();
-const path = require("path");
-const fileUpload = require("express-fileupload");
+// const path = require("path");
+// const fileUpload = require("express-fileupload");
 
 let app = express();
 
@@ -35,6 +35,5 @@ let port = process.env.PORT || 6969;
 //Port === undefined => port = 6969
 
 app.listen(port, () => {
-  //callback
-  console.log("Backend Nodejs is runing on the port : " + port);
+  console.log("Backend Nodejs is runing on the port: " + port);
 });

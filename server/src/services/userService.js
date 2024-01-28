@@ -1,6 +1,14 @@
 import db from "../models/index";
 import bcrypt from "bcryptjs";
 
+import {
+  createNewPaymentAccount,
+  getALlPaymentAccounts,
+  editPaymentAccount,
+  getPaymentAccountById,
+  deletePaymentAccount,
+} from "./paymentAccountService";
+
 const salt = bcrypt.genSaltSync(10);
 
 const hashUserPassword = (password) => {
@@ -115,7 +123,8 @@ const registerUser = (data) => {
           data.firstName &&
           data.lastName &&
           data.address &&
-          data.phoneNumber
+          data.phoneNumber &&
+          data.accountNumber
         )
       ) {
         resolve({
@@ -143,6 +152,12 @@ const registerUser = (data) => {
         });
 
         if (response) {
+          await createNewPaymentAccount({
+            userId: response.id,
+            accountNumber: data.accountNumber,
+            amount: 100000000,
+          });
+
           resolve({
             errCode: 0,
             message: "Create new user successfully",

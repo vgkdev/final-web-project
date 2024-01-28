@@ -11,6 +11,7 @@ const handleCreateNewCategory = async (req, res) => {
 };
 
 const handleGetALlCategories = async (req, res) => {
+  console.log(">>>check call api");
   const response = await getALlCategories();
   return res.status(200).json(response);
 };

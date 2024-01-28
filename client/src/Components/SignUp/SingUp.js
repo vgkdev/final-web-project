@@ -19,6 +19,7 @@ export default function SingUp() {
   const [address, setAddress] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [confirmpass, setConfirmPass] = useState("");
+  const [paymentAccount, setPaymentAccount] = useState("");
 
   const payload = {
     firstName: firstName,
@@ -27,6 +28,7 @@ export default function SingUp() {
     email: email,
     password: password,
     address: address,
+    accountNumber: paymentAccount,
   };
 
   const navigate = useNavigate();
@@ -40,7 +42,8 @@ export default function SingUp() {
       phoneNumber === "" ||
       email === "" ||
       password === "" ||
-      confirmpass === ""
+      confirmpass === "" ||
+      address === ""
     ) {
       toast.error("Nhập thiếu dữ liệu!");
     } else if (password !== confirmpass) {
@@ -151,6 +154,20 @@ export default function SingUp() {
                 style={{ paddingLeft: "10px" }}
                 placeholder="Địa chỉ"
                 onChange={(e) => setAddress(e.target.value)}
+                required
+              />
+            </div>
+
+            <div className="input_details">
+              <label>
+                Số tài khoản<span> *</span>
+              </label>
+              <br />
+              <Input
+                type="text"
+                style={{ paddingLeft: "10px" }}
+                placeholder="Số tài khoản"
+                onChange={(e) => setPaymentAccount(e.target.value)}
                 required
               />
             </div>

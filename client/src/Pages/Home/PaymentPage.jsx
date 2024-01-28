@@ -28,7 +28,7 @@ import {
 import { Buffer } from "buffer";
 import { convertPrice } from "../../Utils/convertData";
 import { animateScroll as scroll } from "react-scroll";
-import { createPaymentService } from "../../api/paymentApi";
+import { createPaymentService, handlePayment } from "../../api/paymentApi";
 import { editUserService } from "../../api/userApi";
 import { updateUser } from "../../reducers/user";
 import { createNewOrderService } from "../../api/ortherApi";
@@ -162,22 +162,34 @@ const PaymentPage = () => {
         }
       }
     } else {
-      const date = Date.now();
-      const payload = {
+      // const date = Date.now();
+      // const payload = {
+      //   userId: user.id,
+      //   orderId: moment.utc(date).local().format("HH:mm:ss"),
+      //   transactionId: "ORDER_" + date,
+      //   orderInfo: "ORDER_" + date,
+      //   clientIp: "127.0.0.1",
+      //   amount: total - (total / 100) * 10,
+      //   status: "Đã thanh toán",
+      //   cartData: cartData,
+      //   orderDescription: "Thanh toán vnpay",
+      //   createDate: moment.utc(date).local().format("YYYYMMDDHHmmss"),
+      // };
+      // const response = await createPaymentService(payload);
+      // console.log("check res payment: ", response);
+      // window.location.href = response.data.checkoutUrl;
+      const paymentRes = await handlePayment({
         userId: user.id,
-        orderId: moment.utc(date).local().format("HH:mm:ss"),
-        transactionId: "ORDER_" + date,
-        orderInfo: "ORDER_" + date,
-        clientIp: "127.0.0.1",
         amount: total - (total / 100) * 10,
-        status: "Đã thanh toán",
-        cartData: cartData,
-        orderDescription: "Thanh toán vnpay",
-        createDate: moment.utc(date).local().format("YYYYMMDDHHmmss"),
-      };
-      const response = await createPaymentService(payload);
-      console.log("check res payment: ", response);
-      window.location.href = response.data.checkoutUrl;
+      });
+
+      console.log(paymentRes.data.errCode);
+
+      if (paymentRes.data.errCode === 0) {
+        navigate("/payment-success");
+      } else {
+        toast.error("Thanh toán thất bại !");
+      }
     }
   };
 
@@ -293,7 +305,7 @@ const PaymentPage = () => {
                       onChange={(e) => setOrderType(e.target.value)}
                     >
                       <option value={"1"}>Thanh toán khi nhận hàng</option>
-                      <option value={"2"}>VNPay</option>
+                      <option value={"2"}>Ngân hàng</option>
                     </Select>
                   </div>
                 </form>

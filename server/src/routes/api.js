@@ -74,6 +74,7 @@ import {
   handleEditPaymentAccount,
   handleGetPaymentAccountById,
   handleDeletePaymentAccount,
+  handlePayment,
 } from "../controllers/paymentAccountController";
 
 const router = express.Router();
@@ -82,6 +83,7 @@ const router = express.Router();
 // console.log("check upload: ", upload);
 
 let initAPIRoutes = (app) => {
+  console.log(">>>check run api");
   router.post("/create-new-user", handleCreateNewUser);
   router.get("/get-all-users", handleGetALlUsers);
   router.put("/edit-user", handleEditUser);
@@ -143,8 +145,9 @@ let initAPIRoutes = (app) => {
   router.get("/get-payment-account-by-id", handleGetPaymentAccountById);
   router.put("/edit-payment-account", handleEditPaymentAccount);
   router.delete("/delete-payment-account", handleDeletePaymentAccount);
+  router.post("/handle-payment", handlePayment);
 
-  return app.use("/api/v1/", router);
+  return app.use("/api/v1", router);
 };
 
 module.exports = initAPIRoutes;
