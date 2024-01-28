@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Box, Text, Wrap, SimpleGrid, Button } from "@chakra-ui/react";
+import { Box, Text, Wrap, SimpleGrid, Button, Select } from "@chakra-ui/react";
 import { useSelector } from "react-redux";
 import { MainProducts } from "../../Components/MainProducts";
 import Loading from "../../Components/Loading";
@@ -8,16 +8,18 @@ const Serum = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [productsPerPage] = useState(8); // Số lượng sản phẩm trên mỗi trang
   const [loading, setLoading] = useState(true);
-
-  const categories = useSelector((state) => state.categories.categories);
+  const [selectedPriceRange, setSelectedPriceRange] = useState(""); // Mức giá được chọn
   const [products, setProducts] = useState([]);
+  const categories = useSelector((state) => state.categories.categories);
 
   useEffect(() => {
-    const serumProducts = categories.filter((value) => {
-      return value.categoryName === "Sản phẩm đặc trị";
-    });
-    setProducts(serumProducts[0]?.Products || []);
-    setLoading(false);
+    const serumProducts = categories.find(
+      (category) => category.categoryName === "Sản phẩm đặc trị"
+    );
+    if (serumProducts) {
+      setProducts(serumProducts.Products || []);
+      setLoading(false);
+    }
   }, [categories]);
 
   // Lấy chỉ mục của sản phẩm đầu tiên và cuối cùng trên trang hiện tại
@@ -37,6 +39,30 @@ const Serum = () => {
     pageNumbers.push(i);
   }
 
+  // Hàm lọc sản phẩm theo mức giá
+  const filterProductsByPrice = () => {
+    if (!selectedPriceRange) return;
+
+    let filteredProducts = products;
+    switch (selectedPriceRange) {
+      case "under100k":
+        filteredProducts = products.filter((product) => product.price < 100000);
+        break;
+      case "100kto300k":
+        filteredProducts = products.filter(
+          (product) => product.price >= 100000 && product.price <= 300000
+        );
+        break;
+      case "over300k":
+        filteredProducts = products.filter((product) => product.price > 300000);
+        break;
+      default:
+        break;
+    }
+    setProducts(filteredProducts);
+    setCurrentPage(1); // Reset về trang đầu tiên sau khi filter
+  };
+
   return (
     <Box p={5}>
       <Text
@@ -49,19 +75,33 @@ const Serum = () => {
         Sản phẩm đặc trị
       </Text>
 
+      <Box>
+        <Select
+          placeholder="Chọn mức giá"
+          onChange={(e) => setSelectedPriceRange(e.target.value)}
+          value={selectedPriceRange}
+        >
+          <option value="under100k">Dưới 100,000</option>
+          <option value="100kto300k">100,000 - 300,000</option>
+          <option value="over300k">Trên 300,000</option>
+        </Select>
+        <Button my={5} onClick={filterProductsByPrice}>
+          Lọc
+        </Button>
+      </Box>
+
       <Wrap justify="center" my={"16"}>
         <SimpleGrid w="90%" spacing={3} columns={[1, 2, 3, 4]} gap={5} m={5}>
-          {currentProducts &&
-            currentProducts.map((value, i) => (
-              <MainProducts
-                key={value.id}
-                id={value.id}
-                image={value.imageUrl}
-                name={value.productName}
-                price={value.price}
-                description={value.description}
-              />
-            ))}
+          {currentProducts.map((value, i) => (
+            <MainProducts
+              key={value.id}
+              id={value.id}
+              image={value.imageUrl}
+              name={value.productName}
+              price={value.price}
+              description={value.description}
+            />
+          ))}
         </SimpleGrid>
 
         {!loading && products.length === 0 && (

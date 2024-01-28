@@ -5,11 +5,11 @@ import { useSelector } from "react-redux";
 import {
   Box,
   Text,
-  Image,
   Button,
-  Stack,
   Wrap,
   SimpleGrid,
+  Select,
+  Stack,
 } from "@chakra-ui/react";
 import Loading from "../Loading";
 
@@ -18,9 +18,10 @@ const Products = () => {
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [productsPerPage] = useState(8);
+  const [selectedPriceRange, setSelectedPriceRange] = useState("");
+  const [filteredProducts, setFilteredProducts] = useState([]);
 
   const categories = useSelector((state) => state.categories.categories);
-  const products = useSelector((state) => state.products.products);
 
   useEffect(() => {
     setTimeout(() => {
@@ -36,17 +37,44 @@ const Products = () => {
     return allProducts;
   };
 
+  useEffect(() => {
+    setFilteredProducts(data);
+  }, [data]);
+
   const indexOfLastProduct = currentPage * productsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-  const currentProducts = data.slice(indexOfFirstProduct, indexOfLastProduct);
+  const currentProducts = filteredProducts.slice(
+    indexOfFirstProduct,
+    indexOfLastProduct
+  );
 
   // Thay đổi trang
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   const pageNumbers = [];
-  for (let i = 1; i <= Math.ceil(data.length / productsPerPage); i++) {
+  for (
+    let i = 1;
+    i <= Math.ceil(filteredProducts.length / productsPerPage);
+    i++
+  ) {
     pageNumbers.push(i);
   }
+
+  // Filter sản phẩm theo giá
+  const filterProductsByPrice = () => {
+    let filtered = data;
+    if (selectedPriceRange === "under100k") {
+      filtered = filtered.filter((product) => product.price < 100000);
+    } else if (selectedPriceRange === "100kto300k") {
+      filtered = filtered.filter(
+        (product) => product.price >= 100000 && product.price <= 300000
+      );
+    } else if (selectedPriceRange === "over300k") {
+      filtered = filtered.filter((product) => product.price > 300000);
+    }
+    setFilteredProducts(filtered);
+    setCurrentPage(1); // Reset về trang đầu tiên sau khi filter
+  };
 
   return (
     <Box p={5}>
@@ -59,6 +87,20 @@ const Products = () => {
       >
         Tất cả sản phẩm
       </Text>
+
+      <Box>
+        <Select
+          placeholder="Chọn mức giá"
+          onChange={(e) => setSelectedPriceRange(e.target.value)}
+        >
+          <option value="under100k">Dưới 100,000</option>
+          <option value="100kto300k">100,000 - 300,000</option>
+          <option value="over300k">Trên 300,000</option>
+        </Select>
+        <Button my={5} onClick={filterProductsByPrice}>
+          Lọc
+        </Button>
+      </Box>
 
       <Wrap justify="center" my={"16"}>
         {!loading && currentProducts.length === 0 && (
