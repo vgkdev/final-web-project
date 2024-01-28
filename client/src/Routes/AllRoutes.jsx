@@ -17,6 +17,7 @@ import FavoriteList from "../Pages/Home/FavoriteList";
 import { useSelector } from "react-redux";
 import UpdateUserInfo from "../Pages/Home/UpdateUserInfo";
 import PaymentSuccess from "../Pages/Home/PaymentSuccess";
+import OtherProducts from "../Pages/Home/OtherProducts";
 
 const AllRoutes = () => {
   const user = useSelector((state) => state.user.user);
@@ -40,6 +41,7 @@ const AllRoutes = () => {
       <Route path="/treatment" element={<Serum />}></Route>
       <Route path="/clean" element={<Clean />}></Route>
       <Route path="/personal-care" element={<PersonalCare />}></Route>
+      <Route path="/other" element={<OtherProducts />}></Route>
       <Route path="/payment" element={<PaymentPage />}></Route>
       <Route path="/payment-success" element={<PaymentSuccess />}></Route>
     </Routes>

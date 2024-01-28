@@ -22,7 +22,7 @@ const LogsPage = ({
         colorScheme="whatsapp"
         onClick={() => handleShowModalProduct(null, "Create")}
       >
-        + Create new category
+        + Thêm sản phẩm mới
       </Button>
 
       {products && (

@@ -8,19 +8,26 @@ import { Image } from "@chakra-ui/react";
 import skinCareIcon from "../../assets/images/skincare-icon.jpg";
 import { TbVaccineBottle } from "react-icons/tb";
 export const BottomNav = (props) => {
-  const { serumProducts, skinProducts, cleanProducts, personalProducts } =
-    props;
+  const {
+    serumProducts,
+    skinProducts,
+    cleanProducts,
+    personalProducts,
+    otherProducts,
+  } = props;
 
   const [navDropDown, setnavDropDown] = useState(false);
   const [dropDownSerum, setDropDownSerum] = useState(false);
   const [dropDownSkin, setDropDownSkin] = useState(false);
   const [dropDownClean, setDropDownClean] = useState(false);
   const [dropDownPersonalCare, setDropDownPersonalCare] = useState(false);
+  const [dropDownOther, setDropDownOther] = useState(false);
 
   const [makeup, setMakeup] = useState(false);
   const [skin, setSkin] = useState(false);
   const [clean, setClean] = useState(false);
   const [pcare, setPcare] = useState(false);
+  const [other, setOther] = useState(false);
   const [mom, setmom] = useState(false);
   const [frag, setFrag] = useState(false);
   const [ayurveda, setAyurveda] = useState(false);
@@ -50,6 +57,7 @@ export const BottomNav = (props) => {
             setFrag(false);
             setAyurveda(false);
             setBrand(false);
+            setOther(false);
             setMakeup(true);
           }}
           onMouseLeave={() => {
@@ -69,6 +77,7 @@ export const BottomNav = (props) => {
             setFrag(false);
             setAyurveda(false);
             setBrand(false);
+            setOther(false);
             setSkin(true);
           }}
           onMouseLeave={() => {
@@ -88,6 +97,7 @@ export const BottomNav = (props) => {
             setFrag(false);
             setAyurveda(false);
             setBrand(false);
+            setOther(false);
             setClean(true);
           }}
           onMouseLeave={() => {
@@ -107,6 +117,7 @@ export const BottomNav = (props) => {
             setFrag(false);
             setAyurveda(false);
             setBrand(false);
+            setOther(false);
             setPcare(true);
           }}
           onMouseLeave={() => {
@@ -114,6 +125,26 @@ export const BottomNav = (props) => {
           }}
         >
           SẢN PHẨM CHỨC NĂNG <IoIosArrowDown />
+        </div>
+
+        <div
+          onMouseEnter={() => {
+            setDropDownOther(true);
+            setMakeup(false);
+            setSkin(false);
+            setClean(false);
+            setmom(false);
+            setFrag(false);
+            setAyurveda(false);
+            setBrand(false);
+            setPcare(false);
+            setOther(true);
+          }}
+          onMouseLeave={() => {
+            setDropDownOther(false);
+          }}
+        >
+          KHÁC <IoIosArrowDown />
         </div>
 
         <Link to="/products">
@@ -205,6 +236,16 @@ export const BottomNav = (props) => {
           setState={setPcare}
           setnav={setDropDownPersonalCare}
           path={"/personal-care"}
+        />
+      )}
+
+      {dropDownOther && (
+        <NavSingle
+          products={otherProducts}
+          state={other}
+          setState={setOther}
+          setnav={setDropDownOther}
+          path={"/other"}
         />
       )}
     </div>

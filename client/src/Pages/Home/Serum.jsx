@@ -1,35 +1,41 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
-import {
-  Box,
-  Text,
-  Image,
-  Button,
-  Stack,
-  Wrap,
-  SimpleGrid,
-} from "@chakra-ui/react";
-import { IoIosHeartEmpty, IoIosHeart } from "react-icons/io";
-import { dataUrl } from "../../share";
-import { Navigate } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
+import { Box, Text, Wrap, SimpleGrid, Button } from "@chakra-ui/react";
 import { useSelector } from "react-redux";
 import { MainProducts } from "../../Components/MainProducts";
 import Loading from "../../Components/Loading";
 
 const Serum = () => {
-  const [products, setProducts] = useState([]);
-  const { token } = JSON.parse(localStorage.getItem("UserToken")) || false;
+  const [currentPage, setCurrentPage] = useState(1);
+  const [productsPerPage] = useState(8); // Số lượng sản phẩm trên mỗi trang
+  const [loading, setLoading] = useState(true);
 
   const categories = useSelector((state) => state.categories.categories);
+  const [products, setProducts] = useState([]);
 
   useEffect(() => {
     const serumProducts = categories.filter((value) => {
       return value.categoryName === "Sản phẩm đặc trị";
     });
-    setProducts(serumProducts[0].Products);
+    setProducts(serumProducts[0]?.Products || []);
+    setLoading(false);
   }, [categories]);
-  console.log("check data from Serum: ", categories);
+
+  // Lấy chỉ mục của sản phẩm đầu tiên và cuối cùng trên trang hiện tại
+  const indexOfLastProduct = currentPage * productsPerPage;
+  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+  const currentProducts = products.slice(
+    indexOfFirstProduct,
+    indexOfLastProduct
+  );
+
+  // Thay đổi trang
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+  // Tính toán số trang
+  const pageNumbers = [];
+  for (let i = 1; i <= Math.ceil(products.length / productsPerPage); i++) {
+    pageNumbers.push(i);
+  }
 
   return (
     <Box p={5}>
@@ -45,8 +51,8 @@ const Serum = () => {
 
       <Wrap justify="center" my={"16"}>
         <SimpleGrid w="90%" spacing={3} columns={[1, 2, 3, 4]} gap={5} m={5}>
-          {products &&
-            products.map((value, i) => (
+          {currentProducts &&
+            currentProducts.map((value, i) => (
               <MainProducts
                 key={value.id}
                 id={value.id}
@@ -55,12 +61,32 @@ const Serum = () => {
                 price={value.price}
                 description={value.description}
               />
-              // <></>
             ))}
         </SimpleGrid>
+
+        {!loading && products.length === 0 && (
+          <Box textAlign={"center"}>Không tìm thấy sản phẩm !</Box>
+        )}
+
+        {loading &&
+          Array.from({ length: 4 }).map((_, index) => <Loading key={index} />)}
       </Wrap>
-      <ToastContainer position="top-center" autoClose={3000} />
+
+      <Box textAlign="center" mt={4}>
+        {pageNumbers.map((number) => (
+          <Button
+            key={number}
+            size="sm"
+            colorScheme={currentPage === number ? "teal" : "gray"}
+            onClick={() => paginate(number)}
+            mx={1}
+          >
+            {number}
+          </Button>
+        ))}
+      </Box>
     </Box>
   );
 };
+
 export default Serum;

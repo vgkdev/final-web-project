@@ -3,7 +3,7 @@ import { Box, Text, Wrap, SimpleGrid, Button } from "@chakra-ui/react";
 import { useSelector } from "react-redux";
 import { MainProducts } from "../../Components/MainProducts";
 
-const Clean = () => {
+const OtherProducts = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [productsPerPage] = useState(8); // Số lượng sản phẩm trên mỗi trang
 
@@ -11,10 +11,10 @@ const Clean = () => {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    const cleanProducts = categories.filter((value) => {
-      return value.categoryName === "Làm sạch";
+    const otherProducts = categories.filter((value) => {
+      return value.categoryName === "Khác";
     });
-    setProducts(cleanProducts[0]?.Products || []);
+    setProducts(otherProducts[0]?.Products || []);
   }, [categories]);
 
   // Lấy chỉ mục của sản phẩm đầu tiên và cuối cùng trên trang hiện tại
@@ -43,7 +43,7 @@ const Clean = () => {
         fontWeight="semibold"
         margin="15px"
       >
-        Sản phẩm làm sạch
+        Sản phẩm khác
       </Text>
 
       <Wrap justify="center" my={"16"}>
@@ -79,4 +79,4 @@ const Clean = () => {
   );
 };
 
-export default Clean;
+export default OtherProducts;

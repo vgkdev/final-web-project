@@ -28,6 +28,10 @@ export const Navbar = () => {
     return value.categoryName === "Sản phẩm chức năng";
   });
 
+  const otherProducts = categories.filter((value) => {
+    return value.categoryName === "Khác";
+  });
+
   return (
     <>
       <BottomNav
@@ -35,6 +39,7 @@ export const Navbar = () => {
         skinProducts={skinProducts[0]?.Products}
         cleanProducts={cleanProducts[0]?.Products}
         personalProducts={personalProducts[0]?.Products}
+        otherProducts={otherProducts[0]?.Products}
       />
     </>
   );

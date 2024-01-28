@@ -16,6 +16,8 @@ import Loading from "../Loading";
 const Products = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [productsPerPage] = useState(8);
 
   const categories = useSelector((state) => state.categories.categories);
   const products = useSelector((state) => state.products.products);
@@ -24,7 +26,7 @@ const Products = () => {
     setTimeout(() => {
       setData(getAllProducts(categories));
       setLoading(false);
-    }, [1000]);
+    }, 1000);
   }, [categories]);
 
   const getAllProducts = (data) => {
@@ -33,7 +35,18 @@ const Products = () => {
       .flatMap((products) => products);
     return allProducts;
   };
-  // console.log("check all products: ", products);
+
+  const indexOfLastProduct = currentPage * productsPerPage;
+  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+  const currentProducts = data.slice(indexOfFirstProduct, indexOfLastProduct);
+
+  // Thay đổi trang
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+  const pageNumbers = [];
+  for (let i = 1; i <= Math.ceil(data.length / productsPerPage); i++) {
+    pageNumbers.push(i);
+  }
 
   return (
     <Box p={5}>
@@ -48,15 +61,15 @@ const Products = () => {
       </Text>
 
       <Wrap justify="center" my={"16"}>
-        {!loading && data.length === 0 && (
+        {!loading && currentProducts.length === 0 && (
           <Box textAlign={"center"}>Không tìm thấy sản phẩm !</Box>
         )}
 
         <SimpleGrid w="90%" spacing={3} columns={[1, 2, 3, 4]} gap={5} m={5}>
-          {data &&
-            data.length !== 0 &&
+          {currentProducts &&
+            currentProducts.length !== 0 &&
             !loading &&
-            data.map((value) => (
+            currentProducts.map((value) => (
               <MainProducts
                 key={value.id}
                 id={value.id}
@@ -67,17 +80,27 @@ const Products = () => {
               />
             ))}
 
-          {loading && (
-            <>
-              <Loading />
-              <Loading />
-              <Loading />
-              <Loading />
-            </>
-          )}
+          {loading &&
+            Array.from({ length: 4 }).map((_, index) => (
+              <Loading key={index} />
+            ))}
         </SimpleGrid>
       </Wrap>
+
+      <Stack direction="row" spacing={2} align="center" justify="center">
+        {pageNumbers.map((number) => (
+          <Button
+            key={number}
+            size="sm"
+            colorScheme={currentPage === number ? "teal" : "gray"}
+            onClick={() => paginate(number)}
+          >
+            {number}
+          </Button>
+        ))}
+      </Stack>
     </Box>
   );
 };
+
 export { Products };

@@ -1,33 +1,38 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
-import {
-  Box,
-  Text,
-  Image,
-  Button,
-  Stack,
-  Wrap,
-  SimpleGrid,
-} from "@chakra-ui/react";
-import { IoIosHeartEmpty, IoIosHeart } from "react-icons/io";
-import { dataUrl } from "../../share";
-import { Navigate } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
+import { Box, Text, Wrap, SimpleGrid, Button } from "@chakra-ui/react";
 import { useSelector } from "react-redux";
 import { MainProducts } from "../../Components/MainProducts";
 
 const PersonalCare = () => {
-  const [products, setProducts] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [productsPerPage] = useState(8); // Số lượng sản phẩm trên mỗi trang
 
   const categories = useSelector((state) => state.categories.categories);
+  const [products, setProducts] = useState([]);
 
   useEffect(() => {
     const personalCareProducts = categories.filter((value) => {
       return value.categoryName === "Sản phẩm chức năng";
     });
-    setProducts(personalCareProducts[0].Products);
+    setProducts(personalCareProducts[0]?.Products || []);
   }, [categories]);
-  console.log("check products: ", products);
+
+  // Lấy chỉ mục của sản phẩm đầu tiên và cuối cùng trên trang hiện tại
+  const indexOfLastProduct = currentPage * productsPerPage;
+  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+  const currentProducts = products.slice(
+    indexOfFirstProduct,
+    indexOfLastProduct
+  );
+
+  // Thay đổi trang
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+  // Tính toán số trang
+  const pageNumbers = [];
+  for (let i = 1; i <= Math.ceil(products.length / productsPerPage); i++) {
+    pageNumbers.push(i);
+  }
 
   return (
     <Box p={5}>
@@ -43,8 +48,8 @@ const PersonalCare = () => {
 
       <Wrap justify="center" my={"16"}>
         <SimpleGrid w="90%" spacing={3} columns={[1, 2, 3, 4]} gap={5} m={5}>
-          {products &&
-            products.map((value, i) => (
+          {currentProducts &&
+            currentProducts.map((value, i) => (
               <MainProducts
                 key={value.id}
                 id={value.id}
@@ -53,12 +58,25 @@ const PersonalCare = () => {
                 price={value.price}
                 description={value.description}
               />
-              // <></>
             ))}
         </SimpleGrid>
       </Wrap>
-      <ToastContainer position="top-center" autoClose={3000} />
+
+      <Box textAlign="center" mt={4}>
+        {pageNumbers.map((number) => (
+          <Button
+            key={number}
+            size="sm"
+            colorScheme={currentPage === number ? "teal" : "gray"}
+            onClick={() => paginate(number)}
+            mx={1}
+          >
+            {number}
+          </Button>
+        ))}
+      </Box>
     </Box>
   );
 };
+
 export default PersonalCare;
