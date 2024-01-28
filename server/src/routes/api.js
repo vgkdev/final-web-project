@@ -68,6 +68,14 @@ import {
   handleDeleteFavoriteList,
 } from "../controllers/favoriteListController";
 
+import {
+  handleCreateNewPaymentAccount,
+  handleGetALlPaymentAccount,
+  handleEditPaymentAccount,
+  handleGetPaymentAccountById,
+  handleDeletePaymentAccount,
+} from "../controllers/paymentAccountController";
+
 const router = express.Router();
 //--------------------------------------------------------
 
@@ -129,6 +137,12 @@ let initAPIRoutes = (app) => {
   router.get("/get-favorite-list-by-userId", handleGetFavoriteListByUserId);
   router.put("/edit-favorite-list", handleEditFavoriteList);
   router.delete("/delete-favorite-list", handleDeleteFavoriteList);
+
+  router.post("/create-new-payment-account", handleCreateNewPaymentAccount);
+  router.get("/get-all-payment-accounts", handleGetALlPaymentAccount);
+  router.get("/get-payment-account-by-id", handleGetPaymentAccountById);
+  router.put("/edit-payment-account", handleEditPaymentAccount);
+  router.delete("/delete-payment-account", handleDeletePaymentAccount);
 
   return app.use("/api/v1/", router);
 };
