@@ -163,6 +163,23 @@ const Home = () => {
               </Box>
             </NavLink>
           </Box>
+
+          <Box display="flex" p={["1px 10px", "1px 4px", "4px 11px"]}>
+            <Box>
+              <Image
+                // width={["69%", "68%", "78%"]}
+                marginRight="5px"
+                boxSize={"30px"}
+                objectFit={"contain"}
+                src={treatmentIcon}
+              />
+            </Box>
+            <NavLink to="/other">
+              <Box>
+                <Text fontSize={["12px", "12px", "15px"]}>Khác</Text>
+              </Box>
+            </NavLink>
+          </Box>
         </Box>
         {/* end option */}
         {/* Slider */}
